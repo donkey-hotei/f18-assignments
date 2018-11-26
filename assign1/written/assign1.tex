@@ -16,10 +16,10 @@
     \item $ \fun{x}{y} $ \par
     Contains a free-variable but is nonetheless a valid lambda term ($ \val{e} $) in $\beta$-normal form.
     \item  $ x $ \par
-    A single free variable is not defined in our semantics so this is a 'stuck state' ($ \not\exists e' . \steps{e}{e'} $ ) but a valid value.
+    A single free variable is not defined in our semantics so this is a `stuck state' ($ \not\exists e'. \steps{e}{e'} $) but a valid value.
     \item $(\app{\fun{x}{\fun{y}{x}}}{y})(\app{\fun{y}{y}}{y}) \mapsto \app{\fun{y}{y}}{y} \mapsto y $
-    \item $(\app{\fun{x}{x}}{x})(\app{\fun{x}{x}}{x}) \mapsto (\app{\app{\fun{x}{x}}{x}}){x} \mapsto \app{x}{x}$ \par
-    This is an invalid value, no way to apply a free variable to another ($\neg(\val{e})$).
+    \item $(\app{\fun{x}{x}}{x})(\app{\fun{x}{x}}{x}) \mapsto (\app{\fun{x}{x}}{x})(\app{\fun{x}{x}}{x}) \mapsto \ldots \par
+        Properly evaluated, this expression evalutates to itself repeatedly (i.e: reaches a fixpoint) ($e \mapsto e$).
     \item $ (\app{\app{\fun{x}{\fun{x}{x}}){a}}}{b} \equiv_\alpha (\app{\app{\fun{x}{\fun{y}{y}}){a}}}{b} \mapsto \app{\fun{y}{y}}{b} \mapsto b $
     \item $\app{(\fun{x}{\fun{y}{x}})}{z} \mapsto z $
 \end{enumerate}
