@@ -4,7 +4,9 @@ exception Unimplemented
 
 let main () =
   let rec gcd (m : int) (n : int) : int =
-       raise Unimplemented
+    if n = 0 then m
+    else
+      gcd n (m mod n)
   in
 
   assert (gcd 5 2 = 1);
@@ -12,7 +14,14 @@ let main () =
   assert (gcd 48 18 = 6);
 
   let rec fizz_buzz (n : int) : unit =
-    raise Unimplemented
+    for i = 0 to n do
+        if i mod 3 = 0 && i mod 5 = 0
+          then Printf.printf "fizzbuzz\n"
+        else if i mod 3 = 0
+          then Printf.printf "fizz\n"
+        else if i mod 5 = 0
+          then Printf.printf "buzz\n"
+    done
   in
 
   let read_line () : string =
@@ -22,11 +31,23 @@ let main () =
   in
 
   let rec read_password (password : string) : unit =
-    raise Unimplemented
+    if read_line () = password
+      then ()
+    else
+      read_password password
   in
 
   let substring_match (pattern : string) (source : string) : int option =
-    raise Unimplemented
+    let n = String.length pattern in
+      let rec recur i =
+        if n + i > String.length source
+          then None
+        else if String.slice source i (n + i) = pattern
+          then Some i
+        else
+          recur (i + 1)
+      in
+      recur 0
   in
 
   assert (substring_match "foo" "foobar" = Some 0);
