@@ -99,4 +99,22 @@ Your answer goes here. Here's the dynamically-scoped untyped lambda calculus ope
     {D}}
 \end{mathpar}
 
+Next I extend the dynamically scoped lambda calculus with a new construct, the let statement. Let statements act like a function in that they bind variables for use in an expression:
+\begin{mathpar}
+(\letv{x}{1}{x + x}) \mapsto 1 + 1 \mapsto 2
+\end{mathpar}
+
+The grammar being extended with:
+\begin{alignat*}{2}
+e ::= \qamp \ldots \\
+\qamp \letv{x}{e_1}{e_2}
+\end{alignat*}
+Preserving dynamic scoping:
+\begin{mathpar}
+\ir{D-Let$_1$}
+  {\dynJ{\ctx, x \rightarrow e_1}{e_2}}
+  {\letv{x}{e_1}{e_2}}
+\end{mathpar}
+
+
 \end{document}
