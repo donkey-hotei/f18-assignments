@@ -6,23 +6,24 @@
 
 \hwtitle
   {Assignment 1}
-  {Will Crichton (wcrichto)} %% REPLACE THIS WITH YOUR NAME/ID
+  {Isaak Yansane-Sisk}
 
 \problem{Problem 1}
-\begin{enumerate}
-    \item 
-        $ \fun{x}{x} $ \par
-        Already in $\beta$-normal form.
-    \item $ \fun{x}{y} $ \par
-    Contains a free-variable but is nonetheless a valid lambda term ($ \val{e} $) in $\beta$-normal form.
-    \item  $ x $ \par
-    A single free variable is not defined in our semantics so this is a `stuck state' ($ \not\exists e'. \steps{e}{e'} $) but a valid value.
-    \item $(\app{\fun{x}{\fun{y}{x}}}{y})(\app{\fun{y}{y}}{y}) \mapsto \app{\fun{y}{y}}{y} \mapsto y $
-    \item $(\app{\fun{x}{x}}{x})(\app{\fun{x}{x}}{x}) \mapsto (\app{\fun{x}{x}}{x})(\app{\fun{x}{x}}{x}) \mapsto \ldots \par
-        Properly evaluated, this expression evalutates to itself repeatedly (i.e: reaches a fixpoint) ($e \mapsto e$).
-    \item $ (\app{\app{\fun{x}{\fun{x}{x}}){a}}}{b} \equiv_\alpha (\app{\app{\fun{x}{\fun{y}{y}}){a}}}{b} \mapsto \app{\fun{y}{y}}{b} \mapsto b $
-    \item $\app{(\fun{x}{\fun{y}{x}})}{z} \mapsto z $
-\end{enumerate}
+    \begin{enumerate}
+        \item 
+            $ \fun{x}{x} $ \par
+            Already in $\beta$-normal form.
+        \item $ \fun{x}{y} $ \par
+        Contains a free-variable but is nonetheless a valid lambda term ($ \val{e} $) in $\beta$-normal form.
+        \item  $ x $ \par
+        A single free variable is not defined in our semantics so this is a 'stuck state' ($ \not\exists e' . \steps{e}{e'} $ ) but a valid value.
+        \item $(\app{\fun{x}{\fun{y}{x}}}{y})(\app{\fun{y}{y}}{y}) \mapsto \app{\fun{y}{y}}{y} \mapsto y $
+        \item $(\app{\fun{x}{x}}{x})(\app{\fun{x}{x}}{x}) \mapsto (\app{\app{\fun{x}{x}}{x}}){x} \mapsto \app{x}{x}$ \par
+        This is an invalid (or "stuck") value, no way to apply a free variable to another ($\neg(\val{e})$).
+        \item $ (\app{\app{\fun{x}{\fun{x}{x}}){a}}}{b} \equiv_\alpha (\app{\app{\fun{x}{\fun{y}{y}}){a}}}{b} \mapsto \app{\fun{y}{y}}{b} \mapsto b $
+        \item $\app{(\fun{x}{\fun{y}{x}})}{z} \mapsto z $
+    \end{enumerate}
+
 
 \problem{Problem 3}
 
@@ -46,6 +47,56 @@ Your answer goes here. Here's the dynamically-scoped untyped lambda calculus ope
 \ir{D-App$_3$}
   {\val{e_1}}
   {\dynJC{\steps{\app{(\fun{x}{e_1})}{e_2}}{e_1}}}
+\end{mathpar}
+
+\begin{mathpar}
+\text{Step 1:}\qquad
+\ir{D-App$_2$}
+  {\ir{D-App$_1$}
+    {\ir{D-App$_3$}
+      {\ir{D-Lam}{ \ }{\val{\fun{\_}{x}}}}
+      {\dynJ{\{x \rightarrow D\}}{\steps
+        {\app{(\fun{x}{\fun{\_}{x}})}{L}}
+        {\fun{\_}{x}}}}}
+    {\dynJ{\{x \rightarrow D\}}{\steps
+      {\app{\app{(\fun{x}{\fun{\_}{x}})}{L}}{*}}
+      {\app{(\fun{\_}{x})}{*}}}}}
+  {\dynJ{\varnothing}{\steps
+    {\app{(\fun{x}{\app{\app{(\fun{x}{\fun{\_}{x}})}{L}}{*}})}{D}}
+    {\app{(\fun{x}{\app{(\fun{\_}{x})}{*}})}{D}}}}
+\end{mathpar}
+
+\begin{mathpar}
+\text{Step 2:}\qquad
+\ir{D-App$_2$}
+  {\ir{D-App$_2$}
+    {\ir{D-Var}
+      {\ctx(x) = D}
+      {\dynJ{\{x \rightarrow D, \_ \rightarrow *\}}{\steps{x}{D}}}}
+    {\dynJ{\{x \rightarrow D\}}{\steps{\app{(\fun{\_}{x})}{*}}}{D}}}
+  {\dynJ{\varnothing}{\steps
+  {\app{(\app{\fun{x}{(\fun{\_}{x})}}{*})}{D}}
+  {(\app{\fun{x}{x})}{D}}}}
+\end{mathpar}
+
+\begin{mathpar}
+\text{Step 3:}\qquad
+\ir{D-App$_2$}
+  {\ir{D-Var}
+    {\ctx(x) = D}
+    {\dynJ{\{x \rightarrow D\}}{\steps{x}{D}}}}
+  {\dynJ{\varnothing}{\steps
+    {\app{(\fun{x}{x})}{D}}
+    {\app{(\fun{x}{D})}{D}}}}
+\end{mathpar}
+
+\begin{mathpar}
+\text{Step 4:}\qquad
+\ir{D-App$_3$}
+  {\val{D}}
+  {\steps
+    {\app{(\fun{x}{D})}{D}}
+    {D}}
 \end{mathpar}
 
 \end{document}
