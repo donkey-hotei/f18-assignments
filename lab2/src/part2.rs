@@ -7,6 +7,12 @@ struct Event {
   pub year: u32
 }
 
+impl PartialEq for Event {
+    fn eq(&self, other: &Self) -> bool {
+        self.year == other.year && self.month == other.month && self.day == other.day
+    }
+}
+
 /* You need to complete two functions in this implementation
  * has_conflict() and update_event(). Note that the argument(s) and
  * return values for these two functions are missing below.
@@ -17,19 +23,19 @@ impl Event {
   }
 
   /* This function checks if two events are one the same date */
-  pub fn has_conflict() {
-    // Your code!
+  pub fn has_conflict(&self, other: &Event) -> bool {
+    self == other
   }
 
   /* This function shifts the date of an event by one day.
    * You can assume that the date is not on the last day
    * of a month */
-  pub fn update_event() {
-    // Your code!
+  pub fn update_event(&mut self) {
+      self.day += 1
   }
 }
 
-#[derive(Debug, Clone, Eq, PartialEq)]
+#[derive(Debug, Default, Clone, Eq, PartialEq)]
 struct Trie {
   chr: char,
   has: bool,
@@ -49,11 +55,39 @@ impl Trie {
   }
 
   fn build(strs: &Vec<&str>, chr: char) -> Trie {
-    unimplemented!()
+    // find all _unique_ first characters
+    let ss = strs.iter()
+        .filter_map(|s| s.chars().next()).collect::<HashSet<_>>();
+    Trie {
+        chr: chr,
+        has: strs.iter().any(|s| s.len() == 0),
+        children:
+            ss.into_iter()
+              .map(|c| { // each unique character has a node at this depth
+                Trie::build(
+                    // find all those words whose next letter is this trie's
+                    // letter, and use their remainders as it's children...
+                    &strs.iter().filter(|s| s.chars().next().unwrap() == c)
+                                .map(|s|
+                                     if s.len() > 1 { &s[1..] }
+                                     else { "" })
+                                .collect::<Vec<_>>(), c)
+              }).collect::<Vec<_>>(),
+    }
   }
 
   pub fn contains(&self, s: &str) -> bool {
-    unimplemented!()
+    if s.len() == 0 { return self.has }
+    else {
+        let chr = s.chars().next().unwrap();
+        for child in self.children.iter() {
+            if child.chr == chr {
+                return child.contains(&s[1..]);
+            }
+        }
+    }
+
+    false
   }
 }
 

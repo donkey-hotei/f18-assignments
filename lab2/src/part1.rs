@@ -9,16 +9,22 @@ fn password_checker(s: String) {
 
     // If the buffer is "Password1" then print "You guessed it!" and return,
     // otherwise print the number of guesses so far.
-    unimplemented!()
+    if buffer == "Password1" {
+        println!("You guessed it!");
+        return;
+    } else {
+        guesses += 1;
+        println!("{:?} guesses so far", guesses);
+    }
   }
 }
 
 fn add_n(v: Vec<i32>, n: i32) -> Vec<i32> {
-  unimplemented!()
+    v.into_iter().map(|e| e + n).collect()
 }
 
 fn add_n_inplace(v: &mut Vec<i32>, n: i32) {
-  unimplemented!()
+    for e in v { *e += n; }
 }
 
 fn reverse_clone<T: Clone>(v: &mut Vec<T>) {
@@ -33,7 +39,7 @@ fn reverse_clone<T: Clone>(v: &mut Vec<T>) {
 fn reverse<T>(v: &mut Vec<T>) {
   let n = v.len();
   for i in 0..n/2 {
-    unimplemented!()
+    v.swap(i, n - i - 1);
   }
 }
 
